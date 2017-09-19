@@ -1,6 +1,8 @@
-//Back to javascript
 var map; //map object
 
+//map initialization function
+//sets up map view
+//marks the tree locatiosn
 function initMap() {
       	var infowindow = new google.maps.InfoWindow;
         map = new google.maps.Map(document.getElementById('map'), {
@@ -10,21 +12,9 @@ function initMap() {
         });
 	//good view of KU is at 40.513348, -75.777088
 	
-	//sets map to center of currently location
-	//var showPosition = function (position) 
-        //   {map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude), 15);}
-	//   navigator.geolocation.getCurrentPosition(showPosition);   
-	
-	// lol mammal new years celebration oddshots
-	// https://oddshot.tv/shot/UzotUBQMtUBCzpND4mz7b-zn
-	// https://oddshot.tv/shot/UzoIxjhoIxhGQbFhTkDgOGXb
-
 	//only 1 object for marker boxes so that when you click on a new one, the old one deletes
 	var marker;
-	//turning structure into markers and displaying it
-        //console.log(data.length);
-
-        
+        //loop through all the trees
 	for (var i = 0; i < data.length; i++) {
                 //place a marker for each tree
                 marker = new google.maps.Marker({
