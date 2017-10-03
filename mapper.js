@@ -1,18 +1,17 @@
-//only 1 object for marker boxes so that when you click on a new one, the old one deletes	
-var map; //map object
+var map;
 var idToMarker = {};
 var nameToIds = {};
-
 var addTreeMarker;
+
 function initMap() {
         var infowindow = new google.maps.InfoWindow;
         map = new google.maps.Map(document.getElementById('map'), {
 	  zoom: 19,
-	  //center: new google.maps.LatLng(40.513348, -75.777088), //closest location
 	  mapTypeId: 'satellite'
         });
 	//good view of KU is at 40.513348, -75.777088
-        //ADD TREE THROUGH RIGHTCLICK ON MAP
+        
+        //Right click opens a form to add a tree
 	google.maps.event.addListener(map, 'rightclick', function(event) {
                 addTreeMarker = new google.maps.Marker({
                         position: event.latLng, 
@@ -44,10 +43,8 @@ function initMap() {
 			infowindow.open(map,addTreeMarker);
                         //addTreeMarker.setMap(null);
         });
-        //combined the ids of like-named trees into dictionaries, mapped to their name
-        //for (commonName in uniqueList){ // can this work?
 
-        //adding markers from data
+        //adding markers to tree from data
 	for (var i = 0; i < data.length; i++) {
                 //mappping each name to an array of ids
                 if (data[i]['name'] in nameToIds)
@@ -60,7 +57,7 @@ function initMap() {
                 marker = new google.maps.Marker({
 			position: new google.maps.LatLng(data[i]['lat'], data[i]['lon']),
 			map: map });
-                //adds click event from the marker to the infowindow
+                //adds click event from the marker to the tree's infowindow
                 google.maps.event.addListener(marker, 'click', (function(marker,i,infowindow) {
 		     return function() {
 		        // content of infowindow
@@ -71,11 +68,6 @@ function initMap() {
                         '<form id="removeTree" method="post" action="delTree.php">'+
                         '<input type="hidden" name="idDelete" value="'+data[i]['id']+'">'+
                         '<input type="submit" style="margin-top:5px;" value="DELETE">'+
-                       // '</form>'+
-                       //// '<form id="editTree" method="post" action="editTree.php">'+
-                       // '<input type="hidden" name="editId" value="'+data[i]['id']+'">'+
-                       // '<input type="submit" style="margin-top:5px;" value="EDIT">'+
-                       // '</form>'+
                         '</center>';
                         infowindow.setContent(contentString);
 			infowindow.open(map, marker);
