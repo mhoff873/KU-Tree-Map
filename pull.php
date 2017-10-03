@@ -25,8 +25,20 @@
 		"name"=> mysql_result($uniqueList,$x,"name")));
         } 
 
+
 	//PHP GLOBALS	
+        //Data is the entire set of all the data. 
+        //all data is pulled when the page refreshes.
+        //marker toggle is done in the javascript in mapper.js
+        //uniqueList is the names of all the unique common names of trees
 	echo "<script> var data = ".json_encode($data).";\n";
         echo "var uniqueList = ".json_encode($uList).";\n";
+         if (isset($_GET["tree"])) {
+                echo "var postTreeValue = ".json_encode($_GET["tree"]).";\n";
+        }else{  
+                echo "var postTreeValue = 'none';\n";
+        } 
+        
+        
         echo "</script>";
         ?>
