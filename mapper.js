@@ -112,9 +112,3 @@ function postTree(tree){
         toggleSpeciesMarker(tree);
         toggleAllMarkers();
 }
-
-
-
-
-
-
