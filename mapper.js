@@ -62,7 +62,17 @@ function initMap() {
 		     return function() {
 		        // content of infowindow
 			var contentString = '<div id="content"><small>'+data[i]['id']+'</small>'+
-			'<h2> '+data[i]['name']+'</h2><p><i>'+ data[i]['tax']+'</i></p></div>'+
+			'<h2> '+data[i]['name'];
+                                if(getTreeValue != 'none'){
+/*                                         contentString +=' <a href="./'+
+                                        '">&#9166;</a>'; */
+                                }else{
+                                        contentString +=' <small><a href="./?tree='+data[i]['name']+
+                                        '" style="text-decoration:none;">&#128269;</a></small>';
+                                }
+                        
+                        contentString +=''+
+                        '</h2><p><i>'+ data[i]['tax']+'</i></p></div>'+
                         '<p><i>('+ data[i]['lat']+', '+data[i]['lon']+')</i></p>'+
                         '<center>'+
                         '<form id="removeTree" method="post" action="delTree.php">'+
@@ -78,37 +88,82 @@ function initMap() {
               idToMarker[data[i]['id']] = marker;  
 	}
         map.setCenter(marker.getPosition());
-
-        //toggleSpeciesMarker("Eastern Redbud");
-        //toggleAllMarkers();
-        //postTree("Ginkgo");
-        //postTree("Blue Spruce");
-        //console.log(postTreeValue);
-        //postTree(postTreeValue.toString());
-        if(postTreeValue != 'none'){
-                postTree(postTreeValue);
+        
+        if(getTreeValue != 'none'){
+                getTree(getTreeValue);
+        }else{
+                //postTree("Eastern Redbud");
         }
+        //generates sidebar. (requires data maps)
+        generateSidebar();
       }
       
-// toggles visibility of marker from common tree name
-//  speciesName - string : common name of tree
+/*  toggleSpeciesMarker(speciesName)
+   toggles visibility of marker for speciesName
+        speciesName - string : common name of tree 
+*/
 function toggleSpeciesMarker(speciesName){
+        //console.log(speciesName);
         for (id in nameToIds[speciesName])
                 idToMarker[nameToIds[speciesName][id]].setVisible(
                     !(idToMarker[nameToIds[speciesName][id]].getVisible()));
 }
-      
-// toggles visibily for all of the markers
-function toggleAllMarkers(){
-        for (var i = 0; i < data.length; i++) 
-                idToMarker[data[i]['id']].setVisible(
-                    !(idToMarker[data[i]['id']].getVisible()));
+
+/*  speciesMarkerOff(speciesName)
+   makes a markers for a species INVISIBLE
+        speciesName - string : common name of tree 
+*/
+function speciesMarkerOff(speciesName){
+        for (id in nameToIds[speciesName])
+                idToMarker[nameToIds[speciesName][id]].setVisible(false);
 }
 
-// results in only urlSearch being selected
+/*  speciesMarkerOn(speciesName)
+   makes a markers for a species VISIBLE
+        speciesName - string : common name of tree 
+*/
+function speciesMarkerOn(speciesName){
+        for (id in nameToIds[speciesName])
+                idToMarker[nameToIds[speciesName][id]].setVisible(true);
+}   
+//toggles marker visibility and checkbox based on unique tree names
+function toggleAllMarkers(){
+        if (getTreeValue=='none'){
+                for (tree in uniqueList){
+                       toggleSpeciesMarker(uniqueList[tree]['name']);
+                       document.getElementById(uniqueList[tree]['name']).checked = 
+                            !(document.getElementById(uniqueList[tree]['name']).checked);
+                }
+        }else{
+                //console.log("species menu");
+                for (tree in uniqueList){
+                       toggleSpeciesMarker(uniqueList[tree]['name']);
+                }
+        }
+}
+
+// results in only tree being visible on the map
 //  tree - string : common name of tree
-function postTree(tree){
+/*  */
+
+//toggles marker visibility and checkbox based on unique tree names
+function allMarkersOff(){
+        for (tree in uniqueList){
+               speciesMarkerOff(uniqueList[tree]['name']);
+               document.getElementById(uniqueList[tree]['name']).checked = false;
+        }
+}
+
+function allMarkersOn(){
+        for (tree in uniqueList){
+               speciesMarkerOn(uniqueList[tree]['name']);
+               document.getElementById(uniqueList[tree]['name']).checked = true;
+        }
+}
+
+function getTree(tree){
         //console.log(tree);
         toggleSpeciesMarker(tree);
         toggleAllMarkers();
+        //document.getElementById(tree).checked = true;
 }
